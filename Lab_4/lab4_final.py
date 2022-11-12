@@ -27,13 +27,6 @@ print(ionosphere.shape)
 print(ionosphere.iloc[:,-1].value_counts())
 
 
-
-
-# scalers = [StandardScaler(),MinMaxScaler(),
-#            RobustScaler(),
-           
-#            ]
-
 X= ionosphere.iloc[:,:-1]
 y= ionosphere.iloc[:,-1]
 
