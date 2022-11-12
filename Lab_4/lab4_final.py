@@ -1,34 +1,16 @@
-import matplotlib.pyplot as plt
-import pandas as pd
-import numpy as np
-from sklearn.datasets import load_digits
-from sklearn.decomposition import FastICA, PCA
-from sklearn.model_selection import train_test_split
-from sklearn.preprocessing import StandardScaler, MinMaxScaler, RobustScaler
-from sklearn.neighbors import KNeighborsClassifier as kNN
-# from sklearn.metrics import confusion_matrix, accuracy_score
-
-from sklearn.tree import DecisionTreeClassifier as DT
-# from sklearn.tree import plot_tree
-from sklearn.ensemble import RandomForestClassifier as RFC
-from sklearn.svm import SVC
-
-from sklearn.metrics import confusion_matrix, accuracy_score,f1_score
 #####
 
 import matplotlib.pyplot as plt
 import pandas as pd
 import numpy as np
 import time
-from sklearn.datasets import load_digits
 from sklearn.decomposition import FastICA, PCA
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler, MinMaxScaler, RobustScaler
 from sklearn.neighbors import KNeighborsClassifier as kNN
-# from sklearn.metrics import confusion_matrix, accuracy_score
+
 
 from sklearn.tree import DecisionTreeClassifier as DT
-# from sklearn.tree import plot_tree
 from sklearn.ensemble import RandomForestClassifier as RFC
 from sklearn.svm import SVC
 
@@ -50,11 +32,6 @@ print(ionosphere.iloc[:,-1].value_counts())
 
 
 
-
-# scalers = [StandardScaler(),MinMaxScaler(),
-#            RobustScaler(),
-           
-#            ]
 
 X= ionosphere.iloc[:,:-1]
 y= ionosphere.iloc[:,-1]
@@ -116,14 +93,8 @@ scalers = Pipeline(steps = [
 ])
 
 
-classifiers = [kNN(15), SVC(),DT(),RFC()]
-# classfiers = Pipeline(steps = [
-#                             ('kNN',kNN()),
-#                             ('SVC',SVC()),
-#                             ('DT',DT()),
-#                             ('RFC',RFC()),
-
-# ])
+classifiers = [kNN(), SVC(),DT(),RFC()]
+#tutaj przypadkiem dla knn w screenach bylo ustawione n=15
 
 transformers = [PCA(n_components=0.95),FastICA()]
 models_df = pd.DataFrame()
