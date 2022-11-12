@@ -1,15 +1,13 @@
-#####
-
 import matplotlib.pyplot as plt
 import pandas as pd
 import numpy as np
 import time
+
+
 from sklearn.decomposition import FastICA, PCA
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler, MinMaxScaler, RobustScaler
 from sklearn.neighbors import KNeighborsClassifier as kNN
-
-
 from sklearn.tree import DecisionTreeClassifier as DT
 from sklearn.ensemble import RandomForestClassifier as RFC
 from sklearn.svm import SVC
@@ -17,9 +15,7 @@ from sklearn.svm import SVC
 from sklearn.metrics import confusion_matrix, accuracy_score,f1_score
 from sklearn.pipeline import Pipeline
 
-
 #####
-
 
 
 ionosphere=pd.read_csv('ionosphere_data.csv', header=None)
@@ -33,6 +29,11 @@ print(ionosphere.iloc[:,-1].value_counts())
 
 
 
+# scalers = [StandardScaler(),MinMaxScaler(),
+#            RobustScaler(),
+           
+#            ]
+
 X= ionosphere.iloc[:,:-1]
 y= ionosphere.iloc[:,-1]
 
@@ -42,6 +43,11 @@ dim_red_alg = [PCA(),FastICA()]
 models = [kNN(15), SVC(),DT(),RFC()]
 
 X_train,X_test, y_train,y_test = train_test_split(X,y,test_size=0.2,random_state=2022,stratify=y)
+
+X_train_copy = X_train.copy()
+X_test_copy = X_test.copy() 
+y_train_copy = y_train.copy()
+y_test_copy =y_test.copy()
 
 # cześć sluzaca do pozyskania odpowiedzi dot liczby probek
 
@@ -69,8 +75,6 @@ X_train,X_test, y_train,y_test = train_test_split(X,y,test_size=0.2,random_state
 # ])
 
 
-
-
 # pipe.fit(X_train, y_train)
 # y_pred=pipe.predict(X_test)
 # # print(confusion_matrix(y_test, y_pred))
@@ -80,21 +84,18 @@ X_train,X_test, y_train,y_test = train_test_split(X,y,test_size=0.2,random_state
 
 #based on
 # https://blog.prokulski.science/2020/10/10/pipeline-w-scikit-learn/
+
 # Own ver
 
-# scalers = [StandardScaler(),MinMaxScaler(),
-#            RobustScaler(),
-           
-#            ]
 
 scalers = Pipeline(steps = [
                             ('StandardScaler',StandardScaler()),
-                            ('MinMaxScaler',MinMaxScaler())
+                            ('MinMaxScaler',MinMaxScaler()),
+                            ('RobustScaler',RobustScaler()),
 ])
 
 
 classifiers = [kNN(), SVC(),DT(),RFC()]
-#tutaj przypadkiem dla knn w screenach bylo ustawione n=15
 
 transformers = [PCA(n_components=0.95),FastICA()]
 models_df = pd.DataFrame()
@@ -108,6 +109,7 @@ pipe = Pipeline(steps = [
  
 # dla każdego typu modelu zmieniamy kolejne transformatory kolumn
 for model in classifiers:
+    X_train, X_test, y_train, y_test = X_train_copy.copy(),X_test_copy.copy(),y_train_copy.copy(),y_test_copy.copy()
     for num_tr in scalers:
         for cat_tr in transformers:
             # odpowiednio zmieniamy jego paramety - dobieramy transformatory
@@ -143,5 +145,7 @@ for model in classifiers:
  
 models_df.reset_index(drop=True, inplace=True)
 
-#print(models_df)
+# print(models_df)
 print(models_df.sort_values(['score'],ascending=False))
+
+#LL
