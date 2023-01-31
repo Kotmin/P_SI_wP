@@ -189,6 +189,9 @@ model_0.summary()
 ## Czas spróbować wygenerować jakieś dane
 
 
+# def pred_and_plot(filename,model=model_0,class_names=list_of_classes):
+
+
 # start paste
 # display([sample_image])
 # plt.show()
@@ -197,28 +200,45 @@ model_0.summary()
 
 
 
-display([sample_image,create_mask(model_0.predict(sample_image[tf.newaxis, ...]))])
-plt.show()
+# display([sample_image,create_mask(model_0.predict(sample_image[tf.newaxis, ...]))])
+# plt.show()
 
 
 # stop paste
 
 
-# list_of_classes = ["Dark","Green","Light","Medium"]
 
-# def get_prediction(object):
-#     pred =  model_0.predict(tf.expand_dims(object,axis=0))
 
-#     if len(pred[0]) > 1:
-#         pred_class = list_of_classes[pred.argmax()]
-#     else:
-#         pred_class = list_of_classes[int(tf.round(pred)[0][0])]
+def load_and_prep_img(filename,img_shape = 224):
+    img = tf.io.read_file(filename)
+    img = tf.image.decode_image(img) # img -> tensor
+    img = tf.image.resize(img,size = [img_shape,img_shape])
+    img = img/255
+    return img
 
-#     # plt.imshow(object)
-#     plt.title(f"Prediction: {pred_class}")
-#     print(f"Prediction: {pred_class}")
-#     return object
+def show_prediction(filename):
+    #import photo
+    img = load_and_prep_img(filename)
 
+    pred =  model_0.predict(tf.expand_dims(img,axis=0))
+    # get prediction class
+    if len(pred[0]) > 1:
+        pred_class = list_of_classes[pred.argmax()]
+    else:
+        pred_class = list_of_classes[int(tf.round(pred)[0][0])]
+
+    plt.imshow(img)
+    plt.title(f"Prediction: {pred_class}")
+    print(f"Prediction: {pred_class}")
+    plt.axis(False)
+    plt.show()
+
+
+
+
+# test
+# show_prediction('evaluate/light_roast_inter.png')
+show_prediction('evaluate/dark_r.jpg')
 
 # def show_test_of_noisiness_reduction(model_name):
     
